@@ -18,6 +18,9 @@ Bundler.require(*Rails.groups)
 
 module BudgeatApi
   class Application < Rails::Application
+    #this loads everything in the lib folder automatically
+    config.eager_load_paths << Rails.root.join('lib')
+
     # Force new test files to be generated in the minitest-spec style
     config.generators do |g|
       g.test_framework :minitest, spec: true
