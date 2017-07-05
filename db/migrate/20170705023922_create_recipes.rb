@@ -19,30 +19,6 @@ class CreateRecipes < ActiveRecord::Migration[5.0]
       t.string :dish_type
       t.string :diets
       t.integer :calories
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      t.integer :ready_in_minutes
-      t.string :image
-      t.float :price_per_serving
-
-
-
       t.timestamps
     end
   end

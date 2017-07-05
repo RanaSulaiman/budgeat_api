@@ -34,10 +34,8 @@ ActiveRecord::Schema.define(version: 20170705023922) do
     t.string   "dish_type"
     t.string   "diets"
     t.integer  "calories"
-    t.integer  "ready_in_minutes"
-    t.float    "price_per_serving"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
 end
