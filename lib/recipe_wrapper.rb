@@ -8,7 +8,7 @@ class RecipeWrapper
 
   def self.getRecipeId
 
-    number_of_recipes = '20'
+    number_of_recipes = '50'
     url = BASE_URL+ "search" + "?number=" + number_of_recipes + "&type=main course"
 
     response = HTTParty.get(url,headers: {
@@ -50,9 +50,35 @@ class RecipeWrapper
         args = {
           :recipe_id => record['id'],
           :title => record['title'],
-          :ready_in_minutes => record['readyInMinutes'],
           :image => record['image'],
-          :price_per_serving => recipe_details['pricePerServing']
+          :source_uri => record['sourceUrl'],
+          :source_name => record['sourceName'],
+          :prep_time => record['preparationMinutes'],
+          :cook_time => record['cookingMinutes'],
+          :ready_time => record['readyInMinutes'],
+          :gluten => record['glutenFree'],
+          :dairy => record['dairyFree'],
+          :vegetarian => record['vegetarian'],
+          :vegan => record['vegan'],
+          :servings => record['servings'],
+          :price_serving => record['pricePerServing'],
+          :cuisines => record['cuisines'],
+          :dish_type => record['dishTypes'],
+          :diets => record['diets'],
+          :calories => record['nutrition']['nutrients'][0]['amount'],
+
+
+
+
+
+
+
+
+
+
+
+
+
         }
         Recipe.create(args)
       end
