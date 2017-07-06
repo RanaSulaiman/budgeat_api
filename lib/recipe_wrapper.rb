@@ -8,7 +8,7 @@ class RecipeWrapper
 
   def self.getRecipeId
 
-    number_of_recipes = '20'
+    number_of_recipes = '1'
     url = BASE_URL+ "search" + "?number=" + number_of_recipes + "&type=main course"
 
     response = HTTParty.get(url,headers: {
@@ -50,6 +50,7 @@ class RecipeWrapper
   def self.readRecipeDetails
       getRecipeId['results'].each do |record|
         extra_detail = getRecipeInformation(record['id'])
+        # calories = (record['nutrition']['nutrients'][0]['amount']) ||= 0
         args = {
           :recipe_id => record['id'],
           :title => record['title'],
@@ -68,11 +69,11 @@ class RecipeWrapper
           :cuisines => extra_detail['cuisines'],
           :dish_type => extra_detail['dishTypes'],
           :diets => extra_detail['diets'],
-          # :calories => record['nutrition']['nutrients'][0]['amount']
+          # :calories => calories
 
         }
         # puts args
-        return Recipe.create(args)
+        Recipe.create(args)
       end
   end
 
