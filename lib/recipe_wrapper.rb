@@ -48,13 +48,14 @@ class RecipeWrapper
   end
 
   def self.readRecipeDetails
+    c = (a ||= "xxx")
       getRecipeId['results'].each do |record|
         extra_detail = getRecipeInformation(record['id'])
         # calories = (record['nutrition']['nutrients'][0]['amount']) ||= 0
         args = {
           :recipe_id => record['id'],
           :title => record['title'],
-          :image => record['image'],
+          :image => extra_detail['image'],
           :source_uri => extra_detail['sourceUrl'],
           :source_name => extra_detail['sourceName'],
           :prep_time => extra_detail['preparationMinutes'],
