@@ -8,8 +8,9 @@ class RecipeWrapper
 
   def self.getRecipeId
 
-    number_of_recipes = '1'
-    url = BASE_URL+ "search" + "?number=" + number_of_recipes + "&type=main course"
+    number_of_recipes = '20'
+
+    url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?instructionsRequired=true&cuisines=indian%2C+chinese%2C+african%2C+italian%2C+middle eastern%2C+mexican%2C+american&number=5'
 
     response = HTTParty.get(url,headers: {
       'X-Mashape-Key': ENV['MASHAPE_KEY'],
@@ -51,12 +52,11 @@ class RecipeWrapper
     c = (a ||= "xxx")
       getRecipeId['results'].each do |record|
         extra_detail = getRecipeInformation(record['id'])
-        # calories = (record['nutrition']['nutrients'][0]['amount']) ||= 0
         args = {
           :recipe_id => record['id'],
           :title => record['title'],
           :image => extra_detail['image'],
-          :source_uri => extra_detail['sourceUrl'],
+          :source_url => extra_detail['sourceUrl'],
           :source_name => extra_detail['sourceName'],
           :prep_time => extra_detail['preparationMinutes'],
           :cook_time => extra_detail['cookingMinutes'],
@@ -70,10 +70,10 @@ class RecipeWrapper
           :cuisines => extra_detail['cuisines'],
           :dish_type => extra_detail['dishTypes'],
           :diets => extra_detail['diets'],
-          # :calories => calories
+          :instructions => extra_detail['instructions'],
+          :weightWatcherSmartPoints => extra_detail['weightWatcherSmartPoints']
 
         }
-        # puts args
         Recipe.create(args)
       end
   end
