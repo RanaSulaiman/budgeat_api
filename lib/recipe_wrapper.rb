@@ -10,7 +10,7 @@ class RecipeWrapper
 
     number_of_recipes = '20'
 
-    url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?instructionsRequired=true&cuisines=indian%2C+chinese%2C+african%2C+italian%2C+middle eastern%2C+mexican%2C+american&number=5'
+    url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?instructionsRequired=true&cuisines=indian%2C+chinese%2C+african%2C+italian%2C+middle eastern%2C+mexican%2C+american&number=20'
 
     response = HTTParty.get(url,headers: {
       'X-Mashape-Key': ENV['MASHAPE_KEY'],
