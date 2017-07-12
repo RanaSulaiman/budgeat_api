@@ -21,6 +21,14 @@ module BudgeatApi
     #this loads everything in the lib folder automatically
     config.eager_load_paths << Rails.root.join('lib')
 
+    # Added to fix React App Error (React Rails API GET https://localhost:4000/recipes)  net::ERR_SSL_PROTOCOL_ERROR)
+    config.middleware.insert_before 0, Rack::Cors do
+     allow do
+       origins '*'
+       resource '*', :headers => :any, :methods => [:get, :post, :put, :delete, :options]
+     end
+   end
+
     # Force new test files to be generated in the minitest-spec style
     config.generators do |g|
       g.test_framework :minitest, spec: true

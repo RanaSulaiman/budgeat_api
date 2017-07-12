@@ -43,7 +43,6 @@ class RecipeWrapper
 
   def self.showRecipeIdPrice
     getRecipeId['results'].each do |record|
-        # puts record['id']
       puts cost = getPricePerServing(record['id'])['pricePerServing']
     end
   end
