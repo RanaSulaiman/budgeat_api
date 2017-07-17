@@ -84,5 +84,8 @@ gem 'httparty'
 gem "react-rails"
 gem 'webpacker'
 
+# Memcached gem
+gem 'dalli'
+
 
 gem "active_model_serializers"
