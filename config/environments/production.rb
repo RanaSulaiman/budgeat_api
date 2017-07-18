@@ -75,4 +75,10 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  #Configure our rails app to serve caching mechanisam
+  config.cache_store = :dalli_store
+  # For ActionController to perform caching
+  config.action_controller.perform_caching = true
+
 end

@@ -4,78 +4,86 @@ require 'dotenv/load'
 
 class RecipeWrapper
 
+  curl_call =  'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?diet=vegetarian&excludeIngredients=coconut&instructionsRequired=false&intolerances=egg%2C+gluten&limitLicense=false&number=10&offset=0&query=burger&type=main+course'
+
+
    BASE_URL = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/'
 
   def self.getRecipeId
+    number_of_recipes = 200
+    max_recipe_num_call = 100
 
-    number_of_recipes = '20'
+    calls = number_of_recipes / max_recipe_num_call
 
-    url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?instructionsRequired=true&number=50'
+    responses = []
 
-    response = HTTParty.get(url,headers: {
-      'X-Mashape-Key': ENV['MASHAPE_KEY'],
-      'Accept': "application/json"
-      }).parsed_response
+    calls.times do |i|
+      number = 100
 
-      return response
+
+      url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?instructionsRequired=true&number=100&offset=' + (number*i).to_s
+      puts "Iteration #{i}"
+      puts "URL: #{url}"
+
+      response = HTTParty.get(url,headers: {
+         'X-Mashape-Key': ENV['MASHAPE_KEY'],
+         'Accept': "application/json"
+         }).parsed_response
+       responses << response
+    end
+
+    return responses
+
   end
 
-  def self.getPricePerServing(recipe_id)
-
-    curl =  'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/479101/information?includeNutrition=false'
-
-
-    url = BASE_URL + recipe_id.to_s + '/information?includeNutrition=true'
-    response = HTTParty.get(url, headers: {
-      'X-Mashape-Key': ENV['MASHAPE_KEY'],
-      'Accept': 'application/json'
-      }).parsed_response
-  end
 
   def self.getRecipeInformation(recipe_id)
+
     url = BASE_URL + recipe_id.to_s + '/information?includeNutrition=true'
-    response = HTTParty.get(url, headers: {
-      'X-Mashape-Key': ENV['MASHAPE_KEY'],
-      'Accept': 'application/json'
-      }).parsed_response
 
-  end
 
-  def self.showRecipeIdPrice
-    getRecipeId['results'].each do |record|
-      puts cost = getPricePerServing(record['id'])['pricePerServing']
+    response = Rails.cache.fetch(url, :expires => 1.month) do
+      HTTParty.get(url, headers: {
+        'X-Mashape-Key': ENV['MASHAPE_KEY'],
+        'Accept': 'application/json'
+        }).parsed_response
     end
   end
 
-  def self.readRecipeDetails
-    c = (a ||= "xxx")
-      getRecipeId['results'].each do |record|
-        extra_detail = getRecipeInformation(record['id'])
-        args = {
-          :recipe_id => record['id'],
-          :title => record['title'],
-          :image => extra_detail['image'],
-          :source_url => extra_detail['sourceUrl'],
-          :source_name => extra_detail['sourceName'],
-          :prep_time => extra_detail['preparationMinutes'],
-          :cook_time => extra_detail['cookingMinutes'],
-          :ready_time => record['readyInMinutes'],
-          :gluten => extra_detail['glutenFree'],
-          :dairy => extra_detail['dairyFree'],
-          :vegetarian => extra_detail['vegetarian'],
-          :vegan => extra_detail['vegan'],
-          :servings => extra_detail['servings'],
-          :price_serving => extra_detail['pricePerServing'],
-          :cuisines => extra_detail['cuisines'],
-          :dish_type => extra_detail['dishTypes'],
-          :diets => extra_detail['diets'],
-          :instructions => extra_detail['instructions'],
-          :weightWatcherSmartPoints => extra_detail['weightWatcherSmartPoints']
 
-        }
-        Recipe.create(args)
+  def self.readRecipeDetails
+    # c = (a ||= "xxx")
+      responses = getRecipeId
+
+      responses.each do |response|
+        response['results'].each do |record|
+          extra_detail = getRecipeInformation(record['id'])
+          args = {
+            :recipe_id => record['id'],
+            :title => record['title'],
+            :image => extra_detail['image'],
+            :source_url => extra_detail['sourceUrl'],
+            :source_name => extra_detail['sourceName'],
+            :prep_time => extra_detail['preparationMinutes'],
+            :cook_time => extra_detail['cookingMinutes'],
+            :ready_time => record['readyInMinutes'],
+            :gluten => extra_detail['glutenFree'],
+            :dairy => extra_detail['dairyFree'],
+            :vegetarian => extra_detail['vegetarian'],
+            :vegan => extra_detail['vegan'],
+            :servings => extra_detail['servings'],
+            :price_serving => extra_detail['pricePerServing'],
+            :cuisines => extra_detail['cuisines'],
+            :dish_type => extra_detail['dishTypes'],
+            :diets => extra_detail['diets'],
+            :instructions => extra_detail['instructions'],
+            :weightWatcherSmartPoints => extra_detail['weightWatcherSmartPoints']
+
+          }
+          Recipe.create(args)
+        end
       end
-  end
+    end
 
 end
 
