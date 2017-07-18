@@ -4,5 +4,4 @@ require 'dotenv/load'
 require 'recipe.rb'
 require 'recipe_wrapper'
 
-Recipe.destroy_all
 RecipeWrapper.readRecipeDetails

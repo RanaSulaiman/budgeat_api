@@ -4,13 +4,10 @@ require 'dotenv/load'
 
 class RecipeWrapper
 
-  curl_call =  'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?diet=vegetarian&excludeIngredients=coconut&instructionsRequired=false&intolerances=egg%2C+gluten&limitLicense=false&number=10&offset=0&query=burger&type=main+course'
-
-
    BASE_URL = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/'
 
   def self.getRecipeId
-    number_of_recipes = 200
+    number_of_recipes = 500
     max_recipe_num_call = 100
 
     calls = number_of_recipes / max_recipe_num_call
@@ -18,12 +15,10 @@ class RecipeWrapper
     responses = []
 
     calls.times do |i|
-      number = 100
-
-
-      url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?instructionsRequired=true&number=100&offset=' + (number*i).to_s
-      puts "Iteration #{i}"
-      puts "URL: #{url}"
+      # number = 100
+      url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?instructionsRequired=true&number=100&offset=' + (max_recipe_num_call*i).to_s
+      # puts "Iteration #{i}"
+      # puts "URL: #{url}"
 
       response = HTTParty.get(url,headers: {
          'X-Mashape-Key': ENV['MASHAPE_KEY'],
@@ -41,7 +36,7 @@ class RecipeWrapper
 
     url = BASE_URL + recipe_id.to_s + '/information?includeNutrition=true'
 
-
+  #Implementing memcached to speed up the API calls
     response = Rails.cache.fetch(url, :expires => 1.month) do
       HTTParty.get(url, headers: {
         'X-Mashape-Key': ENV['MASHAPE_KEY'],
@@ -52,7 +47,6 @@ class RecipeWrapper
 
 
   def self.readRecipeDetails
-    # c = (a ||= "xxx")
       responses = getRecipeId
 
       responses.each do |response|
@@ -83,15 +77,5 @@ class RecipeWrapper
           Recipe.create(args)
         end
       end
-    end
-
+  end
 end
-
-# recipes = RecipeWrapper.getRecipeId
-# puts recipes
-# recipes = RecipeWrapper.getPricePerServing(622084)
-# puts recipes
-
-# RecipeWrapper.showRecipeIdPrice
- # details = RecipeWrapper.readRecipeDetails
- # puts details
