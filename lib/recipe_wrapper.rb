@@ -15,10 +15,7 @@ class RecipeWrapper
     responses = []
 
     calls.times do |i|
-      # number = 100
       url = 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?instructionsRequired=true&number=100&offset=' + (max_recipe_num_call*i).to_s
-      # puts "Iteration #{i}"
-      # puts "URL: #{url}"
 
       response = HTTParty.get(url,headers: {
          'X-Mashape-Key': ENV['MASHAPE_KEY'],
@@ -72,7 +69,6 @@ class RecipeWrapper
             :diets => extra_detail['diets'],
             :instructions => extra_detail['instructions'],
             :weightWatcherSmartPoints => extra_detail['weightWatcherSmartPoints']
-
           }
           Recipe.create(args)
         end

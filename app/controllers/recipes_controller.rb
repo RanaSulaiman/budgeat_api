@@ -1,9 +1,5 @@
 class RecipesController < ApplicationController
   def index
-    # @recipes = Rails.cache.fetch('recipes', expires_in: 5.minutes){
-	  #    Recipe.all
-    # }
-    
     recipes = Recipe.all
       if recipes.length > 1
         render json: recipes.as_json(except: [:created_at, :updated_at]), status: :ok
