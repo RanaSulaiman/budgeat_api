@@ -1,6 +1,6 @@
 require 'httparty'
 # require '../app/models/recipe.rb'
-require 'dotenv/load'
+# require 'dotenv/load'
 
 class RecipeWrapper
 
