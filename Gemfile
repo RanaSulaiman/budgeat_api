@@ -81,8 +81,8 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'httparty'
-gem "react-rails"
-gem 'webpacker'
+#gem "react-rails"
+#gem 'webpacker'
 
 # Memcached gem
 gem 'dalli'
