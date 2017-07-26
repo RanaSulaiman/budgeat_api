@@ -28,6 +28,15 @@ Type the following into your terminal: `$ gem install rails`
 
 ### Create a Project Folder and Clone this Repo into it.
 
+### Generate / Seed the data by  
+Running `$ rails db:reset`
+
+### Get API key for [Spoonacular-api](https://market.mashape.com/spoonacular/recipe-food-nutrition)
+
+### Create environment variable for the key. Save it in an .env file then add the file to .gitignore.
+
+### Check API documentation for request numbers per each plan.
+
 ### Start your Local Server by Running: `$ ./run_server.sh`
 
 ### Open the project in your browser at [http://localhost:4000/recipes](http://localhost:4000/recipes)
